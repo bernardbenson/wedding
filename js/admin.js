@@ -11,7 +11,7 @@
     // ==============================================
 
     // Replace this URL with your deployed Google Apps Script web app URL
-    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQRbEMsrPBDqizEoJitC7_MqNRnnASjvmoQbDdxA8i8aDcHlGEFlPnBDzW3_RdmYA7MA/exec';
 
     // Admin password (in production, this should be validated server-side)
     // This is a simple client-side check; the real security is in the Apps Script
