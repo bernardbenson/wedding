@@ -3,6 +3,7 @@
  * Bernard Benson & Roselyn Marilla Wedding Website
  *
  * Handles admin authentication and RSVP data display
+ * Password validation is done server-side via Google Apps Script
  */
 
 (function() {
@@ -12,10 +13,10 @@
 
     // Configuration loaded from config.js (not tracked in git)
     const GOOGLE_SCRIPT_URL = CONFIG.GOOGLE_SCRIPT_URL;
-    const ADMIN_PASSWORD = CONFIG.ADMIN_PASSWORD;
 
-    // Session storage key
+    // Session storage keys
     const SESSION_KEY = 'wedding_admin_session';
+    const PASSWORD_KEY = 'wedding_admin_pwd';
 
     // ==============================================
     // DOM ELEMENTS
@@ -70,15 +71,21 @@
     // ==============================================
 
     function isLoggedIn() {
-        return sessionStorage.getItem(SESSION_KEY) === 'true';
+        return sessionStorage.getItem(SESSION_KEY) === 'true' && getStoredPassword();
     }
 
-    function setLoggedIn(value) {
-        if (value) {
-            sessionStorage.setItem(SESSION_KEY, 'true');
-        } else {
-            sessionStorage.removeItem(SESSION_KEY);
-        }
+    function getStoredPassword() {
+        return sessionStorage.getItem(PASSWORD_KEY);
+    }
+
+    function setLoggedIn(password) {
+        sessionStorage.setItem(SESSION_KEY, 'true');
+        sessionStorage.setItem(PASSWORD_KEY, password);
+    }
+
+    function clearSession() {
+        sessionStorage.removeItem(SESSION_KEY);
+        sessionStorage.removeItem(PASSWORD_KEY);
     }
 
     async function handleLogin(e) {
@@ -86,32 +93,42 @@
 
         const password = passwordInput.value;
 
+        if (!password) {
+            loginError.textContent = 'Please enter a password.';
+            return;
+        }
+
         // Show loading
         loginText.classList.add('hidden');
         loginSpinner.classList.remove('hidden');
         loginError.textContent = '';
 
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        try {
+            // Validate password by attempting to fetch data from Google Apps Script
+            const data = await fetchRSVPData(password);
 
-        // Validate password
-        if (password === ADMIN_PASSWORD) {
-            setLoggedIn(true);
+            // If we get here without error, password is valid
+            setLoggedIn(password);
             showDashboard();
-            loadRSVPs();
-        } else {
-            loginError.textContent = 'Invalid password. Please try again.';
+            displayRSVPs(data.rsvps || []);
+        } catch (error) {
+            console.error('Login error:', error);
+            if (error.message === 'Invalid password') {
+                loginError.textContent = 'Invalid password. Please try again.';
+            } else {
+                loginError.textContent = 'Error connecting to server. Please try again.';
+            }
             passwordInput.value = '';
             passwordInput.focus();
+        } finally {
+            // Hide loading
+            loginText.classList.remove('hidden');
+            loginSpinner.classList.add('hidden');
         }
-
-        // Hide loading
-        loginText.classList.remove('hidden');
-        loginSpinner.classList.add('hidden');
     }
 
     function handleLogout() {
-        setLoggedIn(false);
+        clearSession();
         showLogin();
         passwordInput.value = '';
     }
@@ -130,37 +147,49 @@
     // DATA LOADING
     // ==============================================
 
+    async function fetchRSVPData(password) {
+        const url = `${GOOGLE_SCRIPT_URL}?password=${encodeURIComponent(password)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        return data;
+    }
+
     async function loadRSVPs() {
+        const password = getStoredPassword();
+
+        if (!password) {
+            // Session expired, redirect to login
+            clearSession();
+            showLogin();
+            return;
+        }
+
         // Show loading state
         refreshText.classList.add('hidden');
         refreshSpinner.classList.remove('hidden');
         refreshBtn.disabled = true;
 
         try {
-            // Check if Google Script URL is configured
-            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-                // Demo mode - use sample data
-                console.log('Demo mode - using sample data');
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const sampleData = getSampleData();
-                displayRSVPs(sampleData);
-            } else {
-                // Fetch from Google Sheets
-                const url = `${GOOGLE_SCRIPT_URL}?password=${encodeURIComponent(ADMIN_PASSWORD)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
-                displayRSVPs(data.rsvps || []);
-            }
+            const data = await fetchRSVPData(password);
+            displayRSVPs(data.rsvps || []);
 
             // Hide error state
             errorState.classList.add('hidden');
         } catch (error) {
             console.error('Error loading RSVPs:', error);
+
+            if (error.message === 'Invalid password') {
+                // Password no longer valid, log out
+                clearSession();
+                showLogin();
+                return;
+            }
+
             showErrorState(error.message || 'Failed to load RSVPs. Please check your configuration.');
         } finally {
             // Hide loading state
@@ -260,48 +289,6 @@
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    }
-
-    // Sample data for demo mode
-    function getSampleData() {
-        return [
-            {
-                timestamp: new Date().toISOString(),
-                name: 'John Smith',
-                email: 'john@example.com',
-                attending: 'yes',
-                guests: '2',
-                dietary: 'None',
-                message: 'Congratulations! So excited for you both!'
-            },
-            {
-                timestamp: new Date(Date.now() - 86400000).toISOString(),
-                name: 'Sarah Johnson',
-                email: 'sarah@example.com',
-                attending: 'yes',
-                guests: '1',
-                dietary: 'Vegetarian',
-                message: 'Can\'t wait to celebrate with you!'
-            },
-            {
-                timestamp: new Date(Date.now() - 172800000).toISOString(),
-                name: 'Mike Davis',
-                email: 'mike@example.com',
-                attending: 'no',
-                guests: '0',
-                dietary: '',
-                message: 'Sorry we can\'t make it. Wishing you all the best!'
-            },
-            {
-                timestamp: new Date(Date.now() - 259200000).toISOString(),
-                name: 'Emily Wilson',
-                email: 'emily@example.com',
-                attending: 'yes',
-                guests: '3',
-                dietary: 'Gluten-free',
-                message: 'The whole family is coming!'
-            }
-        ];
     }
 
     // ==============================================

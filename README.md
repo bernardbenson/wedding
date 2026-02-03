@@ -68,7 +68,7 @@ To enable RSVP form submissions:
 
 ```javascript
 const SHEET_NAME = 'Sheet1';
-const ADMIN_PASSWORD = 'wedding2026'; // Change this!
+const ADMIN_PASSWORD = ''; // Change this!
 
 function doPost(e) {
   try {
