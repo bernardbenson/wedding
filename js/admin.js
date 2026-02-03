@@ -216,20 +216,29 @@
         }
 
         try {
-            // Use GET request with query params (avoids CORS issues with POST)
+            // Use GET request with query params and follow redirects
             const url = `${GOOGLE_SCRIPT_URL}?password=${encodeURIComponent(password)}&action=delete&rowId=${encodeURIComponent(rowId)}`;
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                method: 'GET',
+                redirect: 'follow'
+            });
+
+            if (!response.ok) {
+                throw new Error('Server returned ' + response.status);
+            }
+
             const data = await response.json();
 
             if (data.error) {
                 throw new Error(data.error);
             }
 
+            alert('RSVP deleted successfully');
             // Reload the RSVP list
             loadRSVPs();
         } catch (error) {
             console.error('Delete error:', error);
-            alert('Failed to delete RSVP: ' + (error.message || 'Unknown error'));
+            alert('Failed to delete RSVP: ' + (error.message || 'Unknown error') + '\n\nMake sure you redeployed the Google Apps Script with the new code.');
         }
     }
 
