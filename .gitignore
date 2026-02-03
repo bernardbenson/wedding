@@ -1,1 +1,2 @@
-js/config.js
+# Local overrides (if needed)
+js/config.local.js
