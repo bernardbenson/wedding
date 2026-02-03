@@ -283,6 +283,7 @@ h4 {
 
     .nav-menu--open {
         right: 0;
+        z-index: 999;
     }
 
     .nav-link {
