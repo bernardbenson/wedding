@@ -200,6 +200,52 @@
     }
 
     // ==============================================
+    // DELETE FUNCTION
+    // ==============================================
+
+    async function deleteRSVP(rowId, email) {
+        const confirmDelete = confirm(`Are you sure you want to delete the RSVP for "${email || 'this guest'}"?`);
+
+        if (!confirmDelete) return;
+
+        const password = getStoredPassword();
+        if (!password) {
+            clearSession();
+            showLogin();
+            return;
+        }
+
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'delete',
+                    password: password,
+                    rowId: rowId
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // Reload the RSVP list
+            loadRSVPs();
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('Failed to delete RSVP: ' + (error.message || 'Unknown error'));
+        }
+    }
+
+    // Expose deleteRSVP to global scope for onclick handlers
+    window.deleteRSVP = deleteRSVP;
+
+    // ==============================================
     // DISPLAY FUNCTIONS
     // ==============================================
 
@@ -228,15 +274,16 @@
         emptyState.classList.add('hidden');
 
         // Build table rows
-        const rows = rsvps.map(rsvp => {
+        const rows = rsvps.map((rsvp, index) => {
             const date = formatDate(rsvp.timestamp);
             const attendingClass = rsvp.attending === 'yes'
                 ? 'rsvp-table__status--yes'
                 : 'rsvp-table__status--no';
             const attendingText = rsvp.attending === 'yes' ? 'Yes' : 'No';
+            const rowId = rsvp.id || index;
 
             return `
-                <tr>
+                <tr data-row-id="${rowId}">
                     <td>${escapeHtml(date)}</td>
                     <td>${escapeHtml(rsvp.name || '-')}</td>
                     <td>${escapeHtml(rsvp.email || '-')}</td>
@@ -244,6 +291,9 @@
                     <td>${rsvp.attending === 'yes' ? escapeHtml(rsvp.guests || '1') : '-'}</td>
                     <td>${escapeHtml(rsvp.dietary || '-')}</td>
                     <td>${escapeHtml(rsvp.message || '-')}</td>
+                    <td>
+                        <button class="btn btn--delete" onclick="deleteRSVP('${rowId}', '${escapeHtml(rsvp.email || '')}')">Delete</button>
+                    </td>
                 </tr>
             `;
         }).join('');
