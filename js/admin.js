@@ -293,13 +293,22 @@
                     <td>${escapeHtml(rsvp.dietary || '-')}</td>
                     <td>${escapeHtml(rsvp.message || '-')}</td>
                     <td>
-                        <button class="btn btn--delete" onclick="deleteRSVP('${rowId}', '${escapeHtml(rsvp.email || '')}')">Delete</button>
+                        <button class="btn btn--delete" data-row-id="${rowId}" data-email="${escapeHtml(rsvp.email || '')}">Delete</button>
                     </td>
                 </tr>
             `;
         }).join('');
 
         rsvpTableBody.innerHTML = rows;
+
+        // Attach delete event listeners
+        rsvpTableBody.querySelectorAll('.btn--delete').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const rowId = this.getAttribute('data-row-id');
+                const email = this.getAttribute('data-email');
+                deleteRSVP(rowId, email);
+            });
+        });
     }
 
     function showErrorState(message) {
