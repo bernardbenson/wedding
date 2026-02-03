@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bernard Benson & Roselyn Marilla's Wedding - May 18, 2026">
+    <title>Bernard & Roselyn - May 18, 2026</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar--transparent" id="navbar">
+        <div class="navbar__container">
+            <a href="index.html" class="navbar__logo">B & R</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link nav-link--active">Home</a></li>
+                <li><a href="our-story.html" class="nav-link">Our Story</a></li>
+                <li><a href="wedding-party.html" class="nav-link">Wedding Party</a></li>
+                <li><a href="schedule.html" class="nav-link">Schedule</a></li>
+                <li><a href="rsvp.html" class="nav-link">RSVP</a></li>
+            </ul>
+        </div>
+        <div class="nav-overlay" id="navOverlay"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero__content">
+            <p class="hero__subtitle">The Wedding of</p>
+            <h1 class="hero__names">Bernard Benson</h1>
+            <p class="hero__ampersand">and</p>
+            <h1 class="hero__names">Roselyn Marilla</h1>
+            <p class="hero__date">MAY 18, 2026</p>
+            <p class="hero__quote">"Marriage is honorable among all" - Hebrews 13:4</p>
+
+            <!-- Countdown Timer -->
+            <div class="countdown" id="countdown">
+                <div class="countdown__item">
+                    <span class="countdown__number" id="days">---</span>
+                    <span class="countdown__label">Days</span>
+                </div>
+                <div class="countdown__item">
+                    <span class="countdown__number" id="hours">--</span>
+                    <span class="countdown__label">Hours</span>
+                </div>
+                <div class="countdown__item">
+                    <span class="countdown__number" id="minutes">--</span>
+                    <span class="countdown__label">Minutes</span>
+                </div>
+                <div class="countdown__item">
+                    <span class="countdown__number" id="seconds">--</span>
+                    <span class="countdown__label">Seconds</span>
+                </div>
+            </div>
+
+            <a href="rsvp.html" class="btn btn--primary">RSVP Now</a>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-indicator__icon"></div>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="section section--white">
+        <div class="container text-center">
+            <h2 class="section-title">We're Getting Married!</h2>
+            <p style="max-width: 700px; margin: 0 auto; font-size: 1.1rem; line-height: 1.8;">
+                With joyful hearts, we invite you to celebrate our wedding day.
+                Your presence would mean the world to us as we begin this beautiful journey together.
+            </p>
+            <div class="mt-3">
+                <a href="our-story.html" class="btn btn--gold-outline">Read Our Story</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Info Section -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="card-grid" style="max-width: 900px; margin: 0 auto;">
+                <div class="card">
+                    <div class="card__content">
+                        <div class="card__icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <h3 class="card__title">The Venue</h3>
+                        <p class="card__text">
+                            545 Chelsea Springs Drive<br>
+                            Columbiana, AL 35051
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <div class="card__icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </div>
+                        <h3 class="card__title">The Time</h3>
+                        <p class="card__text">
+                            Monday, May 18, 2026<br>
+                            Ceremony at 5:00 PM<br>
+                            Reception to Follow
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <div class="card__icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                            </svg>
+                        </div>
+                        <h3 class="card__title">RSVP</h3>
+                        <p class="card__text">
+                            Please let us know if you can attend by April 18, 2026
+                        </p>
+                        <div class="mt-2">
+                            <a href="rsvp.html" class="btn btn--primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">RSVP Here</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__names">Bernard & Roselyn</p>
+            <p class="footer__date">May 18, 2026</p>
+            <div class="footer__links">
+                <a href="index.html" class="footer__link">Home</a>
+                <a href="our-story.html" class="footer__link">Our Story</a>
+                <a href="wedding-party.html" class="footer__link">Wedding Party</a>
+                <a href="schedule.html" class="footer__link">Schedule</a>
+                <a href="rsvp.html" class="footer__link">RSVP</a>
+            </div>
+            <p class="footer__copyright">&copy; 2026 Bernard & Roselyn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

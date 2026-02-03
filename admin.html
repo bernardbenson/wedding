@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin - RSVP Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Login Section -->
+    <section class="admin-login" id="loginSection">
+        <div class="admin-login__form">
+            <h1 class="admin-login__title">Admin Login</h1>
+            <p style="color: #666; margin-bottom: 1.5rem;">Enter the admin password to view RSVPs</p>
+
+            <form id="loginForm">
+                <div class="form__group">
+                    <input type="password" id="password" class="form__input" placeholder="Password" required autocomplete="current-password">
+                    <p class="form__error" id="loginError"></p>
+                </div>
+
+                <button type="submit" class="btn btn--primary" style="width: 100%;">
+                    <span id="loginText">Login</span>
+                    <span id="loginSpinner" class="spinner hidden"></span>
+                </button>
+            </form>
+
+            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999;">
+                <a href="index.html" style="color: var(--color-gold);">Back to Website</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Dashboard Section (hidden by default) -->
+    <section class="dashboard hidden" id="dashboardSection">
+        <!-- Navigation -->
+        <nav class="navbar" id="navbar">
+            <div class="navbar__container">
+                <a href="index.html" class="navbar__logo">B & R</a>
+                <button class="btn btn--gold-outline" id="logoutBtn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container" style="padding-top: 100px;">
+            <!-- Dashboard Header -->
+            <div class="dashboard__header">
+                <h1 class="dashboard__title">RSVP Dashboard</h1>
+                <button class="btn btn--primary" id="refreshBtn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+                    <span id="refreshText">Refresh</span>
+                    <span id="refreshSpinner" class="spinner hidden"></span>
+                </button>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-card__number" id="totalResponses">-</span>
+                    <span class="stat-card__label">Total Responses</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card__number" id="attending">-</span>
+                    <span class="stat-card__label">Attending</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card__number" id="notAttending">-</span>
+                    <span class="stat-card__label">Not Attending</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card__number" id="totalGuests">-</span>
+                    <span class="stat-card__label">Total Guests</span>
+                </div>
+            </div>
+
+            <!-- RSVP Table -->
+            <div class="rsvp-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Attending</th>
+                            <th>Guests</th>
+                            <th>Dietary</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rsvpTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem; color: #666;">
+                                Loading RSVPs...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div class="hidden" id="emptyState" style="text-align: center; padding: 3rem; color: #666;">
+                <p style="font-size: 1.1rem;">No RSVPs yet</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Responses will appear here as guests submit their RSVPs.</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="hidden" id="errorState" style="text-align: center; padding: 3rem; color: #d32f2f;">
+                <p style="font-size: 1.1rem;">Error loading RSVPs</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;" id="errorMessage"></p>
+                <button class="btn btn--gold-outline mt-3" onclick="location.reload()">Retry</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

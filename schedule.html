@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wedding schedule and venue details - Bernard Benson & Roselyn Marilla">
+    <title>Schedule - Bernard & Roselyn</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__container">
+            <a href="index.html" class="navbar__logo">B & R</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="our-story.html" class="nav-link">Our Story</a></li>
+                <li><a href="wedding-party.html" class="nav-link">Wedding Party</a></li>
+                <li><a href="schedule.html" class="nav-link nav-link--active">Schedule</a></li>
+                <li><a href="rsvp.html" class="nav-link">RSVP</a></li>
+            </ul>
+        </div>
+        <div class="nav-overlay" id="navOverlay"></div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="section section--blush" style="padding-top: 120px;">
+        <div class="container text-center">
+            <h1 class="script-text" style="font-size: 3.5rem; color: var(--color-gold);">Schedule</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9; margin-top: 1rem;">
+                Monday, May 18, 2026
+            </p>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section class="section section--cream">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <!-- Ceremony -->
+                <div class="event-card animate-on-scroll">
+                    <div class="event-card__icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 12a4 4 0 108 0M8 12a4 4 0 018 0M8 12H3m13 0h5M7 20h10M12 12v8"/>
+                            <circle cx="12" cy="5" r="2"/>
+                        </svg>
+                    </div>
+                    <h2 class="event-card__title">The Ceremony</h2>
+                    <p class="event-card__time">5:00 PM</p>
+                    <p class="event-card__details">
+                        Join us as we say "I do" and begin our journey as husband and wife.
+                        Please arrive by 4:45 PM to be seated before the ceremony begins.
+                    </p>
+                    <p class="event-card__address">
+                        545 Chelsea Springs Drive<br>
+                        Columbiana, AL 35051
+                    </p>
+                </div>
+
+                <!-- Reception -->
+                <div class="event-card animate-on-scroll">
+                    <div class="event-card__icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 22h8M12 11v11M7 11l1-7h8l1 7"/>
+                            <path d="M12 11c-1.5 0-4-1-4-4 0-2 2-4 4-4s4 2 4 4c0 3-2.5 4-4 4z"/>
+                        </svg>
+                    </div>
+                    <h2 class="event-card__title">The Reception</h2>
+                    <p class="event-card__time">Reception to Follow</p>
+                    <p class="event-card__details">
+                        Following the ceremony, please join us for dinner, drinks, dancing,
+                        and celebration! We can't wait to party with you.
+                    </p>
+                    <p class="event-card__address">
+                        Same Location<br>
+                        545 Chelsea Springs Drive<br>
+                        Columbiana, AL 35051
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Venue Map Section -->
+    <section class="section section--white">
+        <div class="container">
+            <h2 class="section-title">Venue Location</h2>
+            <p class="text-center mb-3" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+                545 Chelsea Springs Drive, Columbiana, AL 35051
+            </p>
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3340.8!2d-86.6!3d33.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s545+Chelsea+Springs+Drive%2C+Columbiana%2C+AL+35051!5e0!3m2!1sen!2sus!4v1600000000000!5m2!1sen!2sus"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Wedding Venue Location">
+                </iframe>
+            </div>
+            <div class="text-center mt-3">
+                <a href="https://www.google.com/maps/search/?api=1&query=545+Chelsea+Springs+Drive+Columbiana+AL+35051"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn--gold-outline">
+                    Get Directions
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Info Section -->
+    <section class="section section--cream">
+        <div class="container">
+            <h2 class="section-title">Things to Know</h2>
+            <div class="card-grid" style="max-width: 600px; margin: 0 auto;">
+                <div class="card animate-on-scroll">
+                    <div class="card__content">
+                        <div class="card__icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 2v3m0 14v3m10-10h-3M5 12H2m15.364-6.364l-2.121 2.121M8.757 15.243l-2.121 2.121m12.728 0l-2.121-2.121M8.757 8.757L6.636 6.636"/>
+                            </svg>
+                        </div>
+                        <h3 class="card__title">Parking</h3>
+                        <p class="card__text">
+                            Complimentary parking is available at the venue.
+                            Please follow the signs upon arrival.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card animate-on-scroll">
+                    <div class="card__content">
+                        <div class="card__icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                        </div>
+                        <h3 class="card__title">Photography</h3>
+                        <p class="card__text">
+                            We have a professional photographer. Please enjoy the moment
+                            and allow them to capture the ceremony. Feel free to take
+                            photos during the reception!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__names">Bernard & Roselyn</p>
+            <p class="footer__date">May 18, 2026</p>
+            <div class="footer__links">
+                <a href="index.html" class="footer__link">Home</a>
+                <a href="our-story.html" class="footer__link">Our Story</a>
+                <a href="wedding-party.html" class="footer__link">Wedding Party</a>
+                <a href="schedule.html" class="footer__link">Schedule</a>
+                <a href="rsvp.html" class="footer__link">RSVP</a>
+            </div>
+            <p class="footer__copyright">&copy; 2026 Bernard & Roselyn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

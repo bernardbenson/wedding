@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RSVP for Bernard Benson & Roselyn Marilla's Wedding - May 18, 2026">
+    <title>RSVP - Bernard & Roselyn</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__container">
+            <a href="index.html" class="navbar__logo">B & R</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="our-story.html" class="nav-link">Our Story</a></li>
+                <li><a href="wedding-party.html" class="nav-link">Wedding Party</a></li>
+                <li><a href="schedule.html" class="nav-link">Schedule</a></li>
+                <li><a href="rsvp.html" class="nav-link nav-link--active">RSVP</a></li>
+            </ul>
+        </div>
+        <div class="nav-overlay" id="navOverlay"></div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="section section--blush" style="padding-top: 120px;">
+        <div class="container text-center">
+            <h1 class="script-text" style="font-size: 3.5rem; color: var(--color-gold);">RSVP</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9; margin-top: 1rem;">
+                Please respond by April 18, 2026
+            </p>
+        </div>
+    </section>
+
+    <!-- RSVP Form Section -->
+    <section class="section section--cream">
+        <div class="container">
+            <!-- RSVP Form -->
+            <form class="form" id="rsvpForm">
+                <!-- Name -->
+                <div class="form__group">
+                    <label for="name" class="form__label">Full Name *</label>
+                    <input type="text" id="name" name="name" class="form__input" required placeholder="Your full name">
+                    <p class="form__error" id="nameError"></p>
+                </div>
+
+                <!-- Email -->
+                <div class="form__group">
+                    <label for="email" class="form__label">Email Address *</label>
+                    <input type="email" id="email" name="email" class="form__input" required placeholder="your.email@example.com">
+                    <p class="form__error" id="emailError"></p>
+                </div>
+
+                <!-- Phone -->
+                <div class="form__group">
+                    <label for="phone" class="form__label">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" class="form__input" required placeholder="(555) 123-4567">
+                    <p class="form__error" id="phoneError"></p>
+                </div>
+
+                <!-- Attending -->
+                <div class="form__group">
+                    <label class="form__label">Will you be attending? *</label>
+                    <div class="form__radio-group">
+                        <label class="form__radio">
+                            <input type="radio" name="attending" value="yes" required>
+                            <span>Joyfully Accept</span>
+                        </label>
+                        <label class="form__radio">
+                            <input type="radio" name="attending" value="no">
+                            <span>Regretfully Decline</span>
+                        </label>
+                    </div>
+                    <p class="form__error" id="attendingError"></p>
+                </div>
+
+                <!-- Head Count (shown only if attending) -->
+                <div class="form__group" id="guestsGroup" style="display: none;">
+                    <label for="guests" class="form__label">Head Count (including yourself)</label>
+                    <input type="number" id="guests" name="guests" class="form__input" min="1" max="9" maxlength="1" value="1" style="width: 80px; text-align: center; font-size: 1.25rem;" oninput="this.value = this.value.slice(0,1)">
+                </div>
+
+                <!-- Dietary Restrictions -->
+                <div class="form__group" id="dietaryGroup" style="display: none;">
+                    <label for="dietary" class="form__label">Dietary Restrictions (optional)</label>
+                    <input type="text" id="dietary" name="dietary" class="form__input" placeholder="e.g., Vegetarian, Gluten-free, Nut allergy">
+                </div>
+
+                <!-- Message -->
+                <div class="form__group">
+                    <label for="message" class="form__label">Message for the Couple (optional)</label>
+                    <textarea id="message" name="message" class="form__textarea" placeholder="Share your well wishes or a special message..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form__group text-center">
+                    <button type="submit" class="btn btn--primary" id="submitBtn">
+                        <span id="submitText">Submit RSVP</span>
+                        <span id="submitSpinner" class="spinner hidden"></span>
+                    </button>
+                </div>
+
+                <!-- Form Messages -->
+                <div id="formMessage" class="hidden"></div>
+            </form>
+
+            <!-- Success Message (hidden by default) -->
+            <div class="form__success hidden" id="successMessage">
+                <div class="form__success-icon">&#10003;</div>
+                <h2>Thank You!</h2>
+                <p style="margin-top: 1rem;">Your RSVP has been received. We can't wait to celebrate with you!</p>
+                <p style="margin-top: 0.5rem; color: #666;">A confirmation email will be sent shortly.</p>
+                <a href="index.html" class="btn btn--gold-outline mt-3">Back to Home</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- QR Code Section -->
+    <section class="section section--white">
+        <div class="container text-center">
+            <h2 class="section-title">Share This Page</h2>
+            <p style="max-width: 500px; margin: 0 auto var(--spacing-md);">
+                Scan this QR code or share the link with other guests
+            </p>
+            <div style="display: inline-block; padding: 1rem; background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+                <img src="images/qr-code.png" alt="QR Code to RSVP page" style="width: 200px; height: 200px;" onerror="this.style.display='none'; this.parentElement.innerHTML='<p style=\'color: #666; padding: 2rem;\'>QR Code will be generated after deployment</p>'">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section section--cream">
+        <div class="container text-center">
+            <h2 class="section-title">Questions?</h2>
+            <p style="max-width: 600px; margin: 0 auto;">
+                If you have any questions about the wedding or need to make changes to your RSVP,
+                please don't hesitate to reach out to us.
+            </p>
+            <p style="margin-top: var(--spacing-md); font-weight: 500;">
+                Contact us at: <a href="mailto:wedding@example.com" style="color: var(--color-gold);">wedding@example.com</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__names">Bernard & Roselyn</p>
+            <p class="footer__date">May 18, 2026</p>
+            <div class="footer__links">
+                <a href="index.html" class="footer__link">Home</a>
+                <a href="our-story.html" class="footer__link">Our Story</a>
+                <a href="wedding-party.html" class="footer__link">Wedding Party</a>
+                <a href="schedule.html" class="footer__link">Schedule</a>
+                <a href="rsvp.html" class="footer__link">RSVP</a>
+            </div>
+            <p class="footer__copyright">&copy; 2026 Bernard & Roselyn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/rsvp.js"></script>
+</body>
+</html>
