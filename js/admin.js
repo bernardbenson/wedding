@@ -216,18 +216,9 @@
         }
 
         try {
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'delete',
-                    password: password,
-                    rowId: rowId
-                })
-            });
-
+            // Use GET request with query params (avoids CORS issues with POST)
+            const url = `${GOOGLE_SCRIPT_URL}?password=${encodeURIComponent(password)}&action=delete&rowId=${encodeURIComponent(rowId)}`;
+            const response = await fetch(url);
             const data = await response.json();
 
             if (data.error) {
@@ -287,6 +278,7 @@
                     <td>${escapeHtml(date)}</td>
                     <td>${escapeHtml(rsvp.name || '-')}</td>
                     <td>${escapeHtml(rsvp.email || '-')}</td>
+                    <td>${escapeHtml(rsvp.phone || '-')}</td>
                     <td class="${attendingClass}">${attendingText}</td>
                     <td>${rsvp.attending === 'yes' ? escapeHtml(rsvp.guests || '1') : '-'}</td>
                     <td>${escapeHtml(rsvp.dietary || '-')}</td>
