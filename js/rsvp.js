@@ -10,8 +10,8 @@
     // CONFIGURATION
     // ==============================================
 
-    // Replace this URL with your deployed Google Apps Script web app URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQRbEMsrPBDqizEoJitC7_MqNRnnASjvmoQbDdxA8i8aDcHlGEFlPnBDzW3_RdmYA7MA/exec';
+    // Configuration loaded from config.js (not tracked in git)
+    const GOOGLE_SCRIPT_URL = CONFIG.GOOGLE_SCRIPT_URL;
 
     // ==============================================
     // DOM ELEMENTS
