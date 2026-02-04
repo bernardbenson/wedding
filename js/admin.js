@@ -251,7 +251,7 @@
 
     function displayRSVPs(rsvps) {
         // Calculate statistics
-        const total = rsvps.length;
+        const total = rsvps.reduce((sum, r) => sum + (parseInt(r.guests) || 1), 0);
         const attendingCount = rsvps.filter(r => r.attending === 'yes').length;
         const notAttendingCount = rsvps.filter(r => r.attending === 'no').length;
         const guestCount = rsvps
