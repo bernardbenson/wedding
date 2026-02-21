@@ -29,7 +29,6 @@
     const phoneInput = document.getElementById('phone');
     const attendingInputs = document.querySelectorAll('input[name="attending"]');
     const guestsGroup = document.getElementById('guestsGroup');
-    const dietaryGroup = document.getElementById('dietaryGroup');
 
     // Error elements
     const nameError = document.getElementById('nameError');
@@ -44,12 +43,11 @@
     // EVENT LISTENERS
     // ==============================================
 
-    // Toggle guest/dietary fields based on attendance
+    // Toggle guest fields based on attendance
     attendingInputs.forEach(input => {
         input.addEventListener('change', function() {
             const isAttending = this.value === 'yes';
             guestsGroup.style.display = isAttending ? 'block' : 'none';
-            dietaryGroup.style.display = isAttending ? 'block' : 'none';
         });
     });
 
@@ -86,7 +84,7 @@
             phone: phoneInput.value.trim(),
             attending: document.querySelector('input[name="attending"]:checked').value,
             guests: document.getElementById('guests').value,
-            dietary: document.getElementById('dietary').value.trim(),
+
             message: document.getElementById('message').value.trim(),
             timestamp: new Date().toISOString()
         };

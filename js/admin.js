@@ -290,7 +290,7 @@
                     <td>${escapeHtml(rsvp.phone || '-')}</td>
                     <td class="${attendingClass}">${attendingText}</td>
                     <td>${rsvp.attending === 'yes' ? escapeHtml(rsvp.guests || '1') : '-'}</td>
-                    <td>${escapeHtml(rsvp.dietary || '-')}</td>
+
                     <td>${escapeHtml(rsvp.message || '-')}</td>
                     <td>
                         <button class="btn btn--delete" data-row-id="${rowId}" data-email="${escapeHtml(rsvp.email || '')}">Delete</button>
