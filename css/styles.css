@@ -401,6 +401,11 @@ h4 {
     padding: var(--spacing-xl) var(--spacing-md);
 }
 
+.hero__content {
+    width: 100%;
+    text-align: center;
+}
+
 /* Countdown */
 .countdown {
     display: flex;
