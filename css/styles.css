@@ -259,7 +259,7 @@ h4 {
 }
 
 .navbar--transparent .nav-toggle__bar {
-    background: var(--color-white);
+    background: var(--color-text);
 }
 
 @media (max-width: 768px) {
