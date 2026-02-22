@@ -286,6 +286,10 @@ h4 {
         z-index: 999;
     }
 
+    .nav-menu--open .nav-link {
+        color: var(--color-text);
+    }
+
     .nav-link {
         color: var(--color-text);
         font-size: 1.1rem;
