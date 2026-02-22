@@ -259,7 +259,7 @@ h4 {
 }
 
 .navbar--transparent .nav-toggle__bar {
-    background: var(--color-text);
+    background: var(--color-white);
 }
 
 @media (max-width: 768px) {
@@ -334,8 +334,11 @@ h4 {
 }
 
 .hero__image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
