@@ -28,13 +28,19 @@
     const emailInput = document.getElementById('email');
     const phoneInput = document.getElementById('phone');
     const attendingInputs = document.querySelectorAll('input[name="attending"]');
-    const guestsGroup = document.getElementById('guestsGroup');
+    const plusOneGroup = document.getElementById('plusOneGroup');
+    const plusOneInputs = document.querySelectorAll('input[name="plusOne"]');
+    const kidsGroup = document.getElementById('kidsGroup');
+    const bringingKidsInputs = document.querySelectorAll('input[name="bringingKids"]');
+    const kidsCountGroup = document.getElementById('kidsCountGroup');
 
     // Error elements
     const nameError = document.getElementById('nameError');
     const emailError = document.getElementById('emailError');
     const phoneError = document.getElementById('phoneError');
     const attendingError = document.getElementById('attendingError');
+    const plusOneError = document.getElementById('plusOneError');
+    const kidsError = document.getElementById('kidsError');
 
     // Exit if form doesn't exist
     if (!form) return;
@@ -43,11 +49,22 @@
     // EVENT LISTENERS
     // ==============================================
 
-    // Toggle guest fields based on attendance
+    // Toggle plus one & kids groups based on attendance
     attendingInputs.forEach(input => {
         input.addEventListener('change', function() {
             const isAttending = this.value === 'yes';
-            guestsGroup.style.display = isAttending ? 'block' : 'none';
+            plusOneGroup.style.display = isAttending ? 'block' : 'none';
+            kidsGroup.style.display = isAttending ? 'block' : 'none';
+            if (!isAttending) {
+                kidsCountGroup.style.display = 'none';
+            }
+        });
+    });
+
+    // Toggle kids count input based on bringing kids selection
+    bringingKidsInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            kidsCountGroup.style.display = this.value === 'yes' ? 'block' : 'none';
         });
     });
 
@@ -57,6 +74,12 @@
     phoneInput.addEventListener('input', () => clearError(phoneError));
     attendingInputs.forEach(input => {
         input.addEventListener('change', () => clearError(attendingError));
+    });
+    plusOneInputs.forEach(input => {
+        input.addEventListener('change', () => clearError(plusOneError));
+    });
+    bringingKidsInputs.forEach(input => {
+        input.addEventListener('change', () => clearError(kidsError));
     });
 
     // Form submission
@@ -78,13 +101,22 @@
         setLoading(true);
 
         // Gather form data
+        const attending = document.querySelector('input[name="attending"]:checked').value;
+        const plusOneChecked = document.querySelector('input[name="plusOne"]:checked');
+        const plusOne = attending === 'yes' && plusOneChecked ? plusOneChecked.value : 'no';
+        const bringingKidsChecked = document.querySelector('input[name="bringingKids"]:checked');
+        const bringingKids = attending === 'yes' && bringingKidsChecked ? bringingKidsChecked.value === 'yes' : false;
+        const kidsCount = bringingKids ? parseInt(document.getElementById('kidsCount').value) || 0 : 0;
+        const totalGuests = attending === 'yes' ? 1 + (plusOne === 'yes' ? 1 : 0) + kidsCount : 0;
+
         const formData = {
             name: nameInput.value.trim(),
             email: emailInput.value.trim(),
             phone: phoneInput.value.trim(),
-            attending: document.querySelector('input[name="attending"]:checked').value,
-            guests: document.getElementById('guests').value,
-
+            attending: attending,
+            plusOne: plusOne,
+            kids: kidsCount,
+            guests: totalGuests,
             message: document.getElementById('message').value.trim(),
             timestamp: new Date().toISOString()
         };

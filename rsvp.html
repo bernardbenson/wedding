@@ -87,10 +87,42 @@
                     <p class="form__error" id="attendingError"></p>
                 </div>
 
-                <!-- Head Count (shown only if attending) -->
-                <div class="form__group" id="guestsGroup" style="display: none;">
-                    <label for="guests" class="form__label">Head Count (including yourself)</label>
-                    <input type="number" id="guests" name="guests" class="form__input" min="1" max="5" maxlength="1" value="1" style="width: 80px; text-align: center; font-size: 1.25rem;" oninput="this.value = this.value.slice(0,1)">
+                <!-- Plus One (shown only if attending) -->
+                <div class="form__group" id="plusOneGroup" style="display: none;">
+                    <label class="form__label">Plus One</label>
+                    <div class="form__radio-group">
+                        <label class="form__radio">
+                            <input type="radio" name="plusOne" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="form__radio">
+                            <input type="radio" name="plusOne" value="no">
+                            <span>No</span>
+                        </label>
+                    </div>
+                    <p class="form__error" id="plusOneError"></p>
+                </div>
+
+                <!-- Children (shown only if attending) -->
+                <div class="form__group" id="kidsGroup" style="display: none;">
+                    <label class="form__label">Children</label>
+                    <div class="form__radio-group">
+                        <label class="form__radio">
+                            <input type="radio" name="bringingKids" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="form__radio">
+                            <input type="radio" name="bringingKids" value="no">
+                            <span>No</span>
+                        </label>
+                    </div>
+                    <p class="form__error" id="kidsError"></p>
+                </div>
+
+                <!-- Number of Children (shown only if bringing children) -->
+                <div class="form__group" id="kidsCountGroup" style="display: none;">
+                    <label for="kidsCount" class="form__label">Number of Children</label>
+                    <input type="text" id="kidsCount" name="kidsCount" class="form__input" inputmode="numeric" pattern="[0-9]*" value="1" style="width: 80px; text-align: center; font-size: 1.25rem;" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
 
                 <!-- Message -->

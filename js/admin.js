@@ -251,21 +251,29 @@
 
     function displayRSVPs(rsvps) {
         // Calculate statistics
-        const total = rsvps.reduce((sum, r) => sum + (parseInt(r.guests) || 1), 0);
+        const totalResponses = rsvps.length;
         const attendingCount = rsvps.filter(r => r.attending === 'yes').length;
         const notAttendingCount = rsvps.filter(r => r.attending === 'no').length;
+
+        // Total guests: for each attending RSVP, calculate 1 (self) + plusOne (0 or 1) + kids (0-n)
         const guestCount = rsvps
             .filter(r => r.attending === 'yes')
-            .reduce((sum, r) => sum + (parseInt(r.guests) || 1), 0);
+            .reduce((sum, r) => {
+                const plusOne = r.plusOne === 'yes' ? 1 : 0;
+                const kids = parseInt(r.kids) || 0;
+                // Use the calculated total from guests field, or compute from breakdown
+                const rowTotal = r.guests ? parseInt(r.guests) : (1 + plusOne + kids);
+                return sum + rowTotal;
+            }, 0);
 
         // Update stats
-        totalResponsesEl.textContent = total;
+        totalResponsesEl.textContent = totalResponses;
         attendingEl.textContent = attendingCount;
         notAttendingEl.textContent = notAttendingCount;
         totalGuestsEl.textContent = guestCount;
 
         // Check for empty state
-        if (total === 0) {
+        if (totalResponses === 0) {
             rsvpTableBody.innerHTML = '';
             emptyState.classList.remove('hidden');
             return;
@@ -282,6 +290,19 @@
             const attendingText = rsvp.attending === 'yes' ? 'Yes' : 'No';
             const rowId = rsvp.id || index;
 
+            // Plus One / Kids / Total columns
+            let plusOneText = '-';
+            let kidsText = '-';
+            let totalText = '-';
+
+            if (rsvp.attending === 'yes') {
+                plusOneText = rsvp.plusOne ? (rsvp.plusOne === 'yes' ? 'Yes' : 'No') : '-';
+                kidsText = rsvp.kids !== undefined && rsvp.kids !== null ? String(rsvp.kids) : '-';
+                const plusOneVal = rsvp.plusOne === 'yes' ? 1 : 0;
+                const kidsVal = parseInt(rsvp.kids) || 0;
+                totalText = rsvp.guests ? String(rsvp.guests) : String(1 + plusOneVal + kidsVal);
+            }
+
             return `
                 <tr data-row-id="${rowId}">
                     <td>${escapeHtml(date)}</td>
@@ -289,8 +310,9 @@
                     <td>${escapeHtml(rsvp.email || '-')}</td>
                     <td>${escapeHtml(rsvp.phone || '-')}</td>
                     <td class="${attendingClass}">${attendingText}</td>
-                    <td>${rsvp.attending === 'yes' ? escapeHtml(rsvp.guests || '1') : '-'}</td>
-
+                    <td>${plusOneText}</td>
+                    <td>${kidsText}</td>
+                    <td>${totalText}</td>
                     <td>${escapeHtml(rsvp.message || '-')}</td>
                     <td>
                         <button class="btn btn--delete" data-row-id="${rowId}" data-email="${escapeHtml(rsvp.email || '')}">Delete</button>
