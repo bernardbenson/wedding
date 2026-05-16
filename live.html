@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Watch the wedding ceremony live - Bernard Benson & Roselyn Marilla">
+    <title>Live Stream - Bernard & Roselyn</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__container">
+            <a href="index.html" class="navbar__logo">B & R</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="our-story.html" class="nav-link">Our Story</a></li>
+                <li><a href="wedding-party.html" class="nav-link">Wedding Party</a></li>
+                <li><a href="schedule.html" class="nav-link">Schedule</a></li>
+                <li><a href="rsvp.html" class="nav-link">RSVP</a></li>
+                <li><a href="live.html" class="nav-link nav-link--active">Live</a></li>
+            </ul>
+        </div>
+        <div class="nav-overlay" id="navOverlay"></div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="section section--blush" style="padding-top: 120px;">
+        <div class="container text-center">
+            <h1 class="script-text" style="font-size: 3.5rem; color: var(--color-gold);">Live Stream</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9; margin-top: 1rem;">
+                Watch our ceremony live
+            </p>
+        </div>
+    </section>
+
+    <!-- Live Stream Section -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="map-container">
+                <iframe
+                    src="https://www.youtube.com/embed/Lh_KKkFFIYk"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    title="Wedding Ceremony Live Stream">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__names">Bernard & Roselyn</p>
+            <p class="footer__date">May 18, 2026</p>
+            <div class="footer__links">
+                <a href="index.html" class="footer__link">Home</a>
+                <a href="our-story.html" class="footer__link">Our Story</a>
+                <a href="wedding-party.html" class="footer__link">Wedding Party</a>
+                <a href="schedule.html" class="footer__link">Schedule</a>
+                <a href="rsvp.html" class="footer__link">RSVP</a>
+                <a href="live.html" class="footer__link">Live</a>
+            </div>
+            <p class="footer__copyright">&copy; 2026 Bernard & Roselyn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
