@@ -1,2 +1,5 @@
 # Local overrides (if needed)
 js/config.local.js
+
+#MacOS
+.DS_Store
