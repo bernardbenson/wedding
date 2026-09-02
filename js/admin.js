@@ -1,9 +1,10 @@
 /**
- * Admin Dashboard JavaScript
+ * Admin App Shell JavaScript
  * Bernard Benson & Roselyn Marilla Wedding Website
  *
- * Handles admin authentication and RSVP data display
- * Password validation is done server-side via Google Apps Script
+ * Handles admin authentication (validated server-side via Google Apps Script),
+ * the sidebar/hash router for the post-login app, and the RSVP dashboard panel.
+ * The fitness panels are rendered by js/fitness/ui.js.
  */
 
 (function() {
@@ -11,12 +12,14 @@
     // CONFIGURATION
     // ==============================================
 
-    // Configuration loaded from config.js (not tracked in git)
     const GOOGLE_SCRIPT_URL = CONFIG.GOOGLE_SCRIPT_URL;
 
     // Session storage keys
     const SESSION_KEY = 'wedding_admin_session';
     const PASSWORD_KEY = 'wedding_admin_pwd';
+
+    const PANELS = ['dashboard', 'workouts', 'meals', 'progress', 'profile', 'rsvp'];
+    const DEFAULT_PANEL = 'dashboard';
 
     // ==============================================
     // DOM ELEMENTS
@@ -30,40 +33,50 @@
     const loginText = document.getElementById('loginText');
     const loginSpinner = document.getElementById('loginSpinner');
 
-    // Dashboard elements
-    const dashboardSection = document.getElementById('dashboardSection');
+    // Shell elements
+    const appSection = document.getElementById('appSection');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarNav = document.getElementById('sidebarNav');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const topbarTitle = document.getElementById('topbarTitle');
     const logoutBtn = document.getElementById('logoutBtn');
+
+    // RSVP dashboard elements
     const refreshBtn = document.getElementById('refreshBtn');
     const refreshText = document.getElementById('refreshText');
     const refreshSpinner = document.getElementById('refreshSpinner');
-
-    // Stats elements
     const totalResponsesEl = document.getElementById('totalResponses');
     const attendingEl = document.getElementById('attending');
     const notAttendingEl = document.getElementById('notAttending');
     const totalGuestsEl = document.getElementById('totalGuests');
-
-    // Table elements
     const rsvpTableBody = document.getElementById('rsvpTableBody');
     const emptyState = document.getElementById('emptyState');
     const errorState = document.getElementById('errorState');
     const errorMessage = document.getElementById('errorMessage');
+
+    let rsvpLoaded = false;
+    let currentPanel = null;
 
     // ==============================================
     // INITIALIZATION
     // ==============================================
 
     function init() {
-        // Check for existing session
         if (isLoggedIn()) {
-            showDashboard();
-            loadRSVPs();
+            showApp();
         }
 
-        // Event listeners
         loginForm.addEventListener('submit', handleLogin);
         logoutBtn.addEventListener('click', handleLogout);
         refreshBtn.addEventListener('click', loadRSVPs);
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+        sidebarNav.addEventListener('click', function(e) {
+            if (e.target.closest('.app-sidebar__link')) closeSidebar();
+        });
+        window.addEventListener('hashchange', route);
     }
 
     // ==============================================
@@ -98,7 +111,6 @@
             return;
         }
 
-        // Show loading
         loginText.classList.add('hidden');
         loginSpinner.classList.remove('hidden');
         loginError.textContent = '';
@@ -107,10 +119,10 @@
             // Validate password by attempting to fetch data from Google Apps Script
             const data = await fetchRSVPData(password);
 
-            // If we get here without error, password is valid
             setLoggedIn(password);
-            showDashboard();
             displayRSVPs(data.rsvps || []);
+            rsvpLoaded = true;
+            showApp();
         } catch (error) {
             console.error('Login error:', error);
             if (error.message === 'Invalid password') {
@@ -121,7 +133,6 @@
             passwordInput.value = '';
             passwordInput.focus();
         } finally {
-            // Hide loading
             loginText.classList.remove('hidden');
             loginSpinner.classList.add('hidden');
         }
@@ -129,22 +140,94 @@
 
     function handleLogout() {
         clearSession();
+        if (window.Fitness && Fitness.ui) Fitness.ui.stop();
+        if (window.Fitness && Fitness.store) Fitness.store.stop();
+        rsvpLoaded = false;
+        currentPanel = null;
         showLogin();
         passwordInput.value = '';
     }
 
     function showLogin() {
         loginSection.classList.remove('hidden');
-        dashboardSection.classList.add('hidden');
+        appSection.classList.add('hidden');
+        closeSidebar();
     }
 
-    function showDashboard() {
+    function showApp() {
         loginSection.classList.add('hidden');
-        dashboardSection.classList.remove('hidden');
+        appSection.classList.remove('hidden');
+        if (window.Fitness && Fitness.store) Fitness.store.start();
+        if (window.Fitness && Fitness.ui) Fitness.ui.start();
+        route();
+    }
+
+    // Expose a tiny auth surface for the fitness module
+    window.AdminAuth = {
+        getPassword: getStoredPassword,
+        isLoggedIn: isLoggedIn,
+        logout: handleLogout
+    };
+
+    // ==============================================
+    // ROUTER + SIDEBAR
+    // ==============================================
+
+    function route() {
+        if (!isLoggedIn()) return;
+
+        let name = (location.hash || '').replace('#', '');
+        if (!PANELS.includes(name)) {
+            name = DEFAULT_PANEL;
+            if (location.hash !== '#' + name) {
+                history.replaceState(null, '', '#' + name);
+            }
+        }
+
+        showPanel(name);
+    }
+
+    function showPanel(name) {
+        document.querySelectorAll('.app-panel').forEach(function(panel) {
+            panel.classList.toggle('app-panel--active', panel.id === 'panel-' + name);
+        });
+
+        document.querySelectorAll('.app-sidebar__link').forEach(function(link) {
+            link.classList.toggle('app-sidebar__link--active', link.dataset.panel === name);
+        });
+
+        const panel = document.getElementById('panel-' + name);
+        topbarTitle.textContent = panel ? panel.dataset.title : 'Admin';
+
+        const previous = currentPanel;
+        currentPanel = name;
+
+        if (name === 'rsvp' && !rsvpLoaded) {
+            loadRSVPs();
+        }
+
+        if (window.Fitness && Fitness.ui && name !== 'rsvp') {
+            Fitness.ui.onPanelShown(name, previous);
+        }
+
+        window.scrollTo(0, 0);
+    }
+
+    function toggleSidebar() {
+        const open = !sidebar.classList.contains('app-sidebar--open');
+        sidebar.classList.toggle('app-sidebar--open', open);
+        sidebarOverlay.classList.toggle('app-overlay--visible', open);
+        sidebarToggle.setAttribute('aria-expanded', String(open));
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('app-sidebar--open');
+        sidebarOverlay.classList.remove('app-overlay--visible');
+        sidebarToggle.setAttribute('aria-expanded', 'false');
     }
 
     // ==============================================
-    // DATA LOADING
+    // RSVP DATA LOADING
     // ==============================================
 
     async function fetchRSVPData(password) {
@@ -163,13 +246,10 @@
         const password = getStoredPassword();
 
         if (!password) {
-            // Session expired, redirect to login
-            clearSession();
-            showLogin();
+            handleLogout();
             return;
         }
 
-        // Show loading state
         refreshText.classList.add('hidden');
         refreshSpinner.classList.remove('hidden');
         refreshBtn.disabled = true;
@@ -177,22 +257,18 @@
         try {
             const data = await fetchRSVPData(password);
             displayRSVPs(data.rsvps || []);
-
-            // Hide error state
+            rsvpLoaded = true;
             errorState.classList.add('hidden');
         } catch (error) {
             console.error('Error loading RSVPs:', error);
 
             if (error.message === 'Invalid password') {
-                // Password no longer valid, log out
-                clearSession();
-                showLogin();
+                handleLogout();
                 return;
             }
 
             showErrorState(error.message || 'Failed to load RSVPs. Please check your configuration.');
         } finally {
-            // Hide loading state
             refreshText.classList.remove('hidden');
             refreshSpinner.classList.add('hidden');
             refreshBtn.disabled = false;
@@ -210,8 +286,7 @@
 
         const password = getStoredPassword();
         if (!password) {
-            clearSession();
-            showLogin();
+            handleLogout();
             return;
         }
 
@@ -234,7 +309,6 @@
             }
 
             alert('RSVP deleted successfully');
-            // Reload the RSVP list
             loadRSVPs();
         } catch (error) {
             console.error('Delete error:', error);
@@ -242,37 +316,32 @@
         }
     }
 
-    // Expose deleteRSVP to global scope for onclick handlers
     window.deleteRSVP = deleteRSVP;
 
     // ==============================================
-    // DISPLAY FUNCTIONS
+    // RSVP DISPLAY FUNCTIONS
     // ==============================================
 
     function displayRSVPs(rsvps) {
-        // Calculate statistics
         const totalResponses = rsvps.length;
         const attendingCount = rsvps.filter(r => r.attending === 'yes').length;
         const notAttendingCount = rsvps.filter(r => r.attending === 'no').length;
 
-        // Total guests: for each attending RSVP, calculate 1 (self) + plusOne (0 or 1) + kids (0-n)
+        // Total guests: for each attending RSVP, 1 (self) + plusOne (0 or 1) + kids (0-n)
         const guestCount = rsvps
             .filter(r => r.attending === 'yes')
             .reduce((sum, r) => {
                 const plusOne = r.plusOne === 'yes' ? 1 : 0;
                 const kids = parseInt(r.kids) || 0;
-                // Use the calculated total from guests field, or compute from breakdown
                 const rowTotal = r.guests ? parseInt(r.guests) : (1 + plusOne + kids);
                 return sum + rowTotal;
             }, 0);
 
-        // Update stats
         totalResponsesEl.textContent = totalResponses;
         attendingEl.textContent = attendingCount;
         notAttendingEl.textContent = notAttendingCount;
         totalGuestsEl.textContent = guestCount;
 
-        // Check for empty state
         if (totalResponses === 0) {
             rsvpTableBody.innerHTML = '';
             emptyState.classList.remove('hidden');
@@ -281,7 +350,6 @@
 
         emptyState.classList.add('hidden');
 
-        // Build table rows
         const rows = rsvps.map((rsvp, index) => {
             const date = formatDate(rsvp.timestamp);
             const attendingClass = rsvp.attending === 'yes'
@@ -290,7 +358,6 @@
             const attendingText = rsvp.attending === 'yes' ? 'Yes' : 'No';
             const rowId = rsvp.id || index;
 
-            // Plus One / Kids / Total columns
             let plusOneText = '-';
             let kidsText = '-';
             let totalText = '-';
@@ -323,7 +390,6 @@
 
         rsvpTableBody.innerHTML = rows;
 
-        // Attach delete event listeners
         rsvpTableBody.querySelectorAll('.btn--delete').forEach(btn => {
             btn.addEventListener('click', function() {
                 const rowId = this.getAttribute('data-row-id');
@@ -339,7 +405,6 @@
         emptyState.classList.add('hidden');
         rsvpTableBody.innerHTML = '';
 
-        // Reset stats
         totalResponsesEl.textContent = '-';
         attendingEl.textContent = '-';
         notAttendingEl.textContent = '-';

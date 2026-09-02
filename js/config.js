@@ -4,5 +4,7 @@
  */
 
 const CONFIG = {
-    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwQRbEMsrPBDqizEoJitC7_MqNRnnASjvmoQbDdxA8i8aDcHlGEFlPnBDzW3_RdmYA7MA/exec'
+    GOOGLE_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwQRbEMsrPBDqizEoJitC7_MqNRnnASjvmoQbDdxA8i8aDcHlGEFlPnBDzW3_RdmYA7MA/exec',
+    // Private GitHub repo (owner/name) that stores fitness tracker data via the Contents API
+    FITNESS_REPO: 'bernardbenson/fitness-data'
 };

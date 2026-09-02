@@ -8,15 +8,17 @@ A static wedding website for Bernard Benson & Roselyn Marilla's wedding on May 1
 - **Our Story**: Timeline of the couple's journey together
 - **Wedding Party**: Meet the bridesmaids and groomsmen
 - **Schedule**: Ceremony and reception details with venue map
-- **Photos**: Responsive photo gallery with lightbox viewer
+- **Live**: Link to the livestream
 - **RSVP**: Form that submits to Google Sheets
-- **Admin Dashboard**: Password-protected RSVP viewer with statistics
+- **Admin**: Password-protected app with a sidebar — the RSVP dashboard plus a personal 9-month fitness tracker (workouts, meals, progress) that syncs to a private GitHub repo
 
 ## Tech Stack
 
 - Pure HTML5, CSS3, JavaScript (no frameworks)
-- Google Fonts (Great Vibes, Cormorant Garamond, Montserrat)
+- Google Fonts (Pinyon Script, Cormorant Garamond, Josefin Sans)
 - Google Sheets + Apps Script for RSVP data storage
+- GitHub Contents API (private `fitness-data` repo) for fitness tracker data
+- Chart.js 4 from cdnjs for the fitness charts
 - GitHub Pages for hosting
 
 ## Project Structure
@@ -27,21 +29,27 @@ wedding/
 ├── our-story.html          # Couple's story timeline
 ├── wedding-party.html      # Bridesmaids & groomsmen
 ├── schedule.html           # Ceremony & reception details
-├── photos.html             # Photo gallery
+├── live.html               # Livestream link
 ├── rsvp.html               # RSVP form
-├── admin.html              # Password-protected RSVP viewer
+├── admin.html              # Login + app shell (sidebar: fitness panels + RSVP dashboard)
 ├── css/
-│   └── styles.css          # All styles
+│   ├── styles.css          # Site styles (also login, stat cards, RSVP table)
+│   └── admin-app.css       # Admin shell, sidebar/drawer, fitness components
 ├── js/
+│   ├── config.js           # GOOGLE_SCRIPT_URL + FITNESS_REPO (tracked; GitHub Pages has no build step)
 │   ├── main.js             # Countdown, navigation, animations
 │   ├── rsvp.js             # Form handling & Google Sheets submission
-│   ├── admin.js            # Admin authentication & dashboard
-│   └── gallery.js          # Photo lightbox
+│   ├── admin.js            # Admin auth, hash router, RSVP dashboard
+│   └── fitness/
+│       ├── api.js          # GitHub Contents API client (token in localStorage)
+│       ├── store.js        # Local cache, offline queue, sync + conflict retry
+│       ├── nutrition.js    # BMR/TDEE, macro targets, weight trend analysis
+│       ├── program.js      # 39-week, 3-day full-gym program data + scheduling
+│       ├── meals.js        # Meal library, 2-week rotation, grocery list
+│       └── ui.js           # Renders Dashboard/Workouts/Meals/Progress/Profile
 ├── images/
 │   ├── hero/               # Hero background images
 │   ├── couple/             # Bernard & Roselyn photos
-│   ├── wedding-party/      # Bridesmaids/groomsmen photos
-│   ├── gallery/            # Photo gallery images
 │   └── qr-code.png         # QR code to site
 └── README.md
 ```
@@ -54,8 +62,6 @@ Place your images in the appropriate folders:
 
 - `images/hero/hero-bg.jpg` - Hero background image
 - `images/couple/` - Photos for the Our Story timeline
-- `images/wedding-party/` - Photos of bridesmaids and groomsmen
-- `images/gallery/` - Photos for the gallery
 
 ### 2. Configure Google Sheets Integration
 
@@ -272,18 +278,37 @@ After deployment:
 
 ## Admin Access
 
-The admin dashboard is at `/admin.html`
+The admin app is at `/admin.html`. The password is validated server-side by the Google Apps Script (there is no password in this repo). After login the page shows a sidebar:
 
-Default password: `wedding2026`
+- **Dashboard, Workouts, Meals, Progress, Profile & Sync** — the fitness tracker (below)
+- **RSVPs** — the original RSVP dashboard (stats, table, delete)
 
-**Important:** Change the password in both `js/admin.js` and your Google Apps Script before going live.
+Run locally with any static server, e.g. `python3 -m http.server 8000`, then open `http://localhost:8000/admin.html`.
+
+## Fitness Tracker
+
+A 9-month weight-loss program behind the admin login: three full-gym, full-body sessions a week across four phases (Foundation → Build → Intensify → Peak & Maintain), a meal library with a two-week rotation scaled to your calorie target, and a dashboard with weight trend, adherence, and progression hints.
+
+**Data storage.** Nothing personal lives in this repo. Records are JSON files in the private repo set in `js/config.js` as `FITNESS_REPO` (currently `bernardbenson/fitness-data`), written and read from the browser through the GitHub Contents API:
+
+| File | Contents |
+|---|---|
+| `profile.json` | your profile (stats, dates, workout days) |
+| `weights.json`, `measurements.json` | daily weigh-ins, tape measurements |
+| `workouts/YYYY-MM.json`, `meals/YYYY-MM.json` | logs by month |
+
+Every file is `{"records":[...]}`; deletions are tombstones (`deleted: 1`) and conflicts resolve last-write-wins by `updatedAt`. The browser keeps a local cache and an offline write queue, so logging works without a connection and syncs later.
+
+**Connecting a device.** Create a fine-grained personal access token at github.com/settings/personal-access-tokens/new with *Repository access: only `fitness-data`* and *Contents: Read and write*. Paste it into **Profile & Sync** once per device; it is stored only in that browser's localStorage. Use *Forget token* to remove it.
+
+**Targets.** Maintenance = Mifflin-St Jeor BMR × activity factor; daily calories = maintenance − 22% (floor 1,500 kcal, 1,200 for women); protein 0.8 g per lb of goal weight; fat 27% of calories; carbs fill the rest. The dashboard reads the two-week trend and suggests trimming or adding calories.
 
 ## Color Palette
 
-- Primary Background: `#FAF9F6` (cream)
-- Primary Accent: `#8B9A7B` (sage green)
-- Light Accent: `#9CAF88` (light sage)
-- Text Color: `#2C3E2D` (dark green)
+- Background: `#FFFDFB` (cream)
+- Blush: `#F5D6D0` / `#FBE9E6`
+- Gold accent: `#C9A86C` (hover `#A68B4B`)
+- Olive text: `#5C5C4D` (light `#8B8B7B`)
 - White: `#FFFFFF`
 
 ## Browser Support
